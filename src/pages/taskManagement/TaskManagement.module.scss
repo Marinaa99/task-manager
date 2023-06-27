@@ -1,0 +1,27 @@
+.container {
+text-align: center;
+
+  .add-button {
+    background: green;
+
+    &:hover{
+      background: darkgreen;
+    }
+  }
+
+  button {
+    background: var(--blue-color);
+    color: var(--white-color);
+    padding: 10px;
+    margin: 10px;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: "DMSans-Regular";
+
+    &:hover {
+      background: var(--text-table);
+    }
+  }
+}
