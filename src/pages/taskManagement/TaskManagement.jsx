@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import classes from "./TaskManagement.module.scss"
-import TaskTable from "../../components/taskTable/TaskTable.jsx";
+import TaskTable from "./taskTable/TaskTable.jsx";
 import TaskForm from "../../components/taskForm/TaskForm.jsx";
 
 
@@ -28,9 +28,8 @@ const TaskManagement = ({tasks, setTasks}) => {
         setSelectedTask(null);
     };
 
-    const editTask = (taskId) => {
-        const taskToEdit = tasks.find((task) => task.id === taskId);
-        setSelectedTask(taskToEdit);
+    const editTask = (task) => {
+        setSelectedTask(task);
     };
 
     const handleTabChange = (tab) => {

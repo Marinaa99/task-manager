@@ -2,13 +2,17 @@ import React from "react";
 import classes from "./TaskSearch.module.scss"
 
 
-const TaskSearch = ({ searchTerm, onSearchChange }) => {
+const TaskSearch = ({
+                        placeholder = "",
+                        onChange = () => {} }) => {
+
     return <div className={classes["container"]}>
         <input
             type="text"
-            placeholder="Search task..."
-            value={searchTerm}
-            onChange={onSearchChange}
+            placeholder={placeholder}
+            onChange={(e) => {
+                onChange(e?.target?.value);
+            }}
         />
     </div>
 }
