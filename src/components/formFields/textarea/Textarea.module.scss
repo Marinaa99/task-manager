@@ -1,0 +1,12 @@
+textarea {
+  width: 30%;
+  margin-right: 10px;
+  border-radius: 15px;
+  border: none;
+  background: var(--white-color);
+  resize: none;
+
+  &:focus {
+    outline: none;
+  }
+}

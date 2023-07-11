@@ -1,0 +1,26 @@
+table {
+  width: 80%;
+  background: var(--white-color);
+  text-align: center;
+  margin: 20px auto;
+  border-radius: 15px;
+  padding: 10px;
+
+
+  th,
+  td {
+    text-align: center;
+  }
+
+  th {
+    color: var(--text-table);
+    font-size: 14px;
+    font-family: "DMSans-Medium", sans-serif;
+  }
+
+  td {
+    color: var(--text-color);
+    font-size: 17px;
+    font-family: "DMSans-Medium", sans-serif;
+  }
+}

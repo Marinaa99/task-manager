@@ -1,36 +1,45 @@
 import React from "react";
 import classes from "./Table.module.scss";
 
-const Table = ({headers, data, editRow, deleteRow}) => {
+const Table = ({header, data}) => {
     return (
         <table>
             <thead>
             <tr>
-                {headers.map((header) => (
-                    <th key={header}>{header}</th>
+                {header?.map((item) => (
+                    <th key={`table-header-${item.index}`}>{item?.title}</th>
                 ))}
             </tr>
             </thead>
             <tbody>
-            {data.map((row) => (
-                <tr key={row.id}>
-                    {Object.values(row).map((value, index) => (
-                        <td key={index}>{value}</td>
-                    ))}
-
-                    <td>
-                        <button className={classes["edit-button"]} onClick={() => editRow(row)}>
-                            Edit
-                        </button>
-                        <button className={classes["delete-button"]} onClick={() => deleteRow(row.id)}>
-                            Delete
-                        </button>
-                    </td>
-                    
+            {data.length > 0 ? (
+                data.map((row, index) => (
+                    <tr key={`table-row-${index}`}>
+                        {header?.map((header, headerIndex) => {
+                            if (header.render) {
+                                return (
+                                    <td key={`table-row-${index}-item-${headerIndex}`}>
+                                        {header.render(row)}
+                                    </td>
+                                );
+                            } else {
+                                return (
+                                    <td key={`table-row-${index}-item-${header?.index}`}>
+                                        {row[header?.index] ? row[header?.index] : null}
+                                    </td>
+                                );
+                            }
+                        })}
+                    </tr>
+                ))
+            ) : (
+                <tr>
+                    <td colSpan={header.length}>No data</td>
                 </tr>
-            ))}
+            )}
             </tbody>
         </table>
+
     )
 }
 

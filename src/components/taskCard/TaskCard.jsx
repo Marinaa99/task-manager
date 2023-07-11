@@ -2,7 +2,6 @@ import React from "react";
 import classes from "./TaskCard.module.scss";
 
 
-
 const TaskCard = ({task}) => {
 
     return <div className={classes["container"]}>
@@ -14,3 +13,5 @@ const TaskCard = ({task}) => {
 
 
 export default TaskCard;
+
+

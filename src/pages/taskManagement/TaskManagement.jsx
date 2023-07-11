@@ -1,14 +1,14 @@
-import React, {useState} from "react";
+import React, {useContext} from "react";
 import classes from "./TaskManagement.module.scss"
 import TaskTable from "./taskTable/TaskTable.jsx";
-import TaskForm from "../../components/taskForm/TaskForm.jsx";
-
+import TaskForm from "./taskForm/TaskForm.jsx";
+import AddButton from "../../components/buttons/addButton/AddButton.jsx";
+import Button from "../../components/buttons/button/Button.jsx";
+import {TaskContext} from "../../context/TaskContext.jsx";
 
 const TaskManagement = ({tasks, setTasks}) => {
-
-    const [selectedTab, setSelectedTab] = useState('all');
-    const [selectedTask, setSelectedTask] = useState(null);
-    const [showAddForm, setShowAddForm] = useState(false);
+    const { state, dispatch } = useContext(TaskContext);
+    const { selectedTab, selectedTask, showAddForm } = state;
 
     const addTask = (task) => {
         setTasks((prevTasks) => [...prevTasks, task]);
@@ -23,22 +23,24 @@ const TaskManagement = ({tasks, setTasks}) => {
     };
     const updateTask = (updatedTask) => {
         setTasks((prevTasks) =>
-            prevTasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
+            prevTasks.map((task) =>
+                task.id === updatedTask.id ? updatedTask : task
+            )
         );
-        setSelectedTask(null);
+        dispatch({ type: "SET_SELECTED_TASK", payload: null });
     };
 
     const editTask = (task) => {
-        setSelectedTask(task);
+        dispatch({ type: "SET_SELECTED_TASK", payload: task });
     };
 
     const handleTabChange = (tab) => {
-        setSelectedTab(tab);
+        dispatch({ type: "SET_SELECTED_TAB", payload: tab });
     };
 
     const handleAddClick = () => {
-        setShowAddForm(true);
-        setSelectedTask(null);
+        dispatch({ type: "SET_SHOW_ADD_FORM", payload: true });
+        dispatch({ type: "SET_SELECTED_TASK", payload: null });
     };
 
     const filteredTasks = tasks.filter((task) => {
@@ -54,15 +56,20 @@ const TaskManagement = ({tasks, setTasks}) => {
 
 
     return <div className={classes["container"]}>
-        <button className={classes["add-button"]} onClick={handleAddClick}>Add</button>
+
         <div>
-            <button onClick={() => handleTabChange('all')}>All tasks</button>
-            <button onClick={() => handleTabChange('wishlist')}>Wishlist</button>
-            <button onClick={() => handleTabChange('to-do')}>To Do</button>
-            <button onClick={() => handleTabChange('in-progress')}>In Progress</button>
-            <button onClick={() => handleTabChange('done')}>Done</button>
-            <button onClick={() => handleTabChange('deleted')}>Deleted</button>
+            <Button label="All tasks" onClick={() => handleTabChange('all')} />
+            <Button label="Wishlist" onClick={() => handleTabChange('wishlist')} />
+            <Button label="To Do" onClick={() => handleTabChange('to-do')} />
+            <Button label="In Progress" onClick={() => handleTabChange('in-progress')} />
+            <Button label="Done" onClick={() => handleTabChange('done')} />
+            <Button label="Deleted" onClick={() => handleTabChange('deleted')} />
+            <AddButton
+                className={classes["add-button"]}
+                onClick={handleAddClick}
+            />
         </div>
+
 
         {showAddForm && (
             <TaskForm

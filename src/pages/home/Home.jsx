@@ -2,17 +2,19 @@ import React, {useState} from "react";
 import classes from "./Home.module.scss";
 import TaskColumn from "../../components/taskColumn/TaskColumn.jsx";
 import TaskSearch from "../../components/taskSearch/TaskSearch.jsx";
-
+import TaskWrapper from "../../components/taskWrapper/TaskWrapper.jsx";
+import useDebounce from "../../hooks/UseDebounce.js";
 
 const Home = ({tasks}) => {
     const [searchTerm, setSearchTerm] = useState('');
+    const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
 
-     const filteredTasks = (status) => {
+    const filteredTasks = (status) => {
          return tasks.filter(
              (task) =>
                  task.status === status &&
-                 task.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+                 task.title.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) &&
                  !task.deleted
          );
      }
@@ -27,8 +29,8 @@ const Home = ({tasks}) => {
             placeholder="Search task"
             onChange={handleSearchChange}
         />
-        <div className={classes["container"]}>
 
+       <TaskWrapper>
                 <TaskColumn
                     title="Wishlist"
                     tasks={filteredTasks('wishlist')}
@@ -45,7 +47,7 @@ const Home = ({tasks}) => {
                     title="Done"
                     tasks={filteredTasks('done')}
                 />
-            </div>
+       </TaskWrapper>
 
 
     </>

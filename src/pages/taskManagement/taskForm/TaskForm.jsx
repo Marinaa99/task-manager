@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import classes from "./TaskForm.module.scss";
-import FormField from "./formField/FormField.jsx";
+import Input from "../../../components/formFields/input/Input.jsx";
+import Textarea from "../../../components/formFields/textarea/Textarea.jsx";
+import Select from "../../../components/formFields/select/Select.jsx";
+import SubmitButton from "../../../components/buttons/submitButton/SubmitButton.jsx";
 const TaskForm = ({ addTask, updateTask, selectedTask }) => {
     const [taskData, setTaskData] = useState({
         title: '',
@@ -24,8 +27,7 @@ const TaskForm = ({ addTask, updateTask, selectedTask }) => {
         }
     }, [selectedTask]);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = () => {
         const newTask = {
             id: selectedTask ? selectedTask.id : Math.random().toString(),
             ...taskData
@@ -63,28 +65,31 @@ const TaskForm = ({ addTask, updateTask, selectedTask }) => {
     return (
         <div className={classes.container}>
             <form onSubmit={handleSubmit}>
-                <FormField
+                <Input
                     type="text"
                     placeholder="Naziv"
                     name="title"
                     value={taskData.title}
                     onChange={handleInputChange}
                 />
-                <FormField
+                <Textarea
                     type="textarea"
                     placeholder="Opis"
                     name="description"
                     value={taskData.description}
                     onChange={handleInputChange}
                 />
-                <FormField
+                <Select
                     type="select"
                     name="status"
                     value={taskData.status}
                     onChange={handleInputChange}
                     options={statusOptions}
                 />
-                <button type="submit">{selectedTask ? 'Update' : 'Add'}</button>
+                <SubmitButton
+                label={selectedTask ? 'Update' : 'Add'}
+                onClick={handleSubmit}
+                />
             </form>
         </div>
     );

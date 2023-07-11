@@ -11,9 +11,11 @@ const TaskColumn = ({ title, tasks }) => {
                 <h3>{title}</h3>
                 <img src={dots} alt="Dots" />
             </div>
-            {tasks.map((task) => (
-                <TaskCard key={task.id} task={task} />
-            ))}
+            {tasks.length > 0 ? (
+                tasks.map((task) => <TaskCard key={task.id} task={task} />)
+            ) : (
+                <p>No data available</p>
+            )}
         </div>
     );
 };

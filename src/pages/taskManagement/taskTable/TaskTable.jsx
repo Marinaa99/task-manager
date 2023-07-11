@@ -1,9 +1,12 @@
 import React from "react";
 import classes from "./TaskTable.module.scss";
 import Table from "../../../components/table/Table.jsx";
+import Button from "../../../components/buttons/button/Button.jsx";
 const TaskTable = ({ tasks, selectedTab, removeTask, editTask }) => {
-    const headers = ["Name", ...(selectedTab === "all" ? ["Status"] : [])];
-
+    const header = [
+        { title: "Name", index: "name", status:"status" },
+        ...(selectedTab === "all" ? [{ title: "Status", index: "status" }] : []),
+    ];
     const handleEdit = (task) => {
         editTask(task);
     };
@@ -20,12 +23,26 @@ const TaskTable = ({ tasks, selectedTab, removeTask, editTask }) => {
 
     }));
 
+    const actionsHeader = [
+        {
+            title: "Actions",
+            index: null,
+            render: (data) => {
+                if (selectedTab !== "deleted") {
+                    return <div>
+                        <Button label="Edit" onClick={() => handleEdit(data)}/>
+                        <Button className={classes["delete-button"]} label="Delete" onClick={() => handleDelete(data.id)}/>
+                    </div>
+                }
+            }
+        }
+    ]
+
     return (
         <div className={classes["container"]}>
-            <Table headers={headers}
+            <Table header={[...header, ...actionsHeader]}
                    data={formattedData}
-                   editRow={handleEdit}
-                   deleteRow={handleDelete} />
+                   />
         </div>
     );
 };
