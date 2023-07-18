@@ -17,8 +17,7 @@ function App() {
   return (
         <div className="__root-element">
             <button className="__toggle-button" onClick={handlePageSwitch}>
-                {activePage === "Home" ? "Task Management" : "Home"}
-            </button>
+
             {activePage === "Home" ? <Home tasks={tasks}/> : <TaskManagement tasks={tasks} setTasks={setTasks} />}
         </div>
   )
