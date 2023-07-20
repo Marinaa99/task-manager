@@ -1,16 +1,23 @@
 import React from "react";
 import classes from "./TaskCard.module.scss";
+import { Card } from 'antd';
+
 
 
 const TaskCard = ({task}) => {
 
-    return <div className={classes["container"]}>
-        <h3>{task.title}</h3>
-        <p>{task.description}</p>
-        <p>{task.status}</p>
-    </div>
-}
-
+    return (
+        <Card
+            title={task.title}
+            bordered={false}
+        >
+            <div className={classes["container"]}>
+                <p>{task.description}</p>
+                <p>{task.status}</p>
+            </div>
+        </Card>
+    );
+};
 
 export default TaskCard;
 

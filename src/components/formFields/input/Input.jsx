@@ -1,9 +1,11 @@
 import React from 'react';
-import  "./Input.module.scss";
+//import  "./Input.module.scss";
+import { Input as AntdInput} from "antd";
 
 const Input = ({ type, placeholder, name, value, onChange }) => {
     return (
-        <input
+        <AntdInput
+            className={"custom-input"}
             type={type}
             placeholder={placeholder}
             name={name}

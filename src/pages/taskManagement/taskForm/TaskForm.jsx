@@ -54,6 +54,13 @@ const TaskForm = ({ addTask, updateTask, selectedTask }) => {
         }));
     };
 
+    const handleStatusChange = (status) => {
+        setTaskData((prevTaskData) => ({
+            ...prevTaskData,
+            status,
+        }));
+    };
+
     const statusOptions = [
         { value: 'wishlist', label: 'Wishlist' },
         { value: 'to-do', label: 'To Do' },
@@ -83,7 +90,7 @@ const TaskForm = ({ addTask, updateTask, selectedTask }) => {
                     type="select"
                     name="status"
                     value={taskData.status}
-                    onChange={handleInputChange}
+                    onChange={handleStatusChange}
                     options={statusOptions}
                 />
                 <SubmitButton

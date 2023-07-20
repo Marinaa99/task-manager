@@ -1,15 +1,18 @@
 import React from 'react';
 import  "./Select.module.scss";
+import { Select as AntdSelect } from "antd";
+
+const { Option } = AntdSelect;
 
 const Select = ({ name, value, onChange, options }) => {
     return (
-        <select name={name} value={value} onChange={onChange}>
+        <AntdSelect name={name} value={value} onChange={onChange}>
             {options.map((option) => (
-                <option key={option.value} value={option.value}>
+                <Option key={option.value} value={option.value}>
                     {option.label}
-                </option>
+                </Option>
             ))}
-        </select>
+        </AntdSelect>
     );
 };
 

@@ -1,12 +1,8 @@
 .button {
   background: green;
   color: var(--white-color);
-  padding: 10px;
-  margin: 10px;
-  border-radius: 15px;
-  border: none;
-  cursor: pointer;
   font-size: 14px;
+  margin: 5px;
   font-family: "DMSans-Regular";
 
   &:hover {

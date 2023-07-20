@@ -1,8 +1,10 @@
 import React from 'react';
-import  "./Textarea.module.scss";
+import { Input } from "antd";
+
+
 const Textarea = ({ type, placeholder, name, value, onChange }) => {
     return (
-        <textarea
+        <Input
             type={type}
             placeholder={placeholder}
             name={name}

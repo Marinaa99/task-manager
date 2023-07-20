@@ -8,19 +8,7 @@
   @media (min-width: 768px) {
     & {
       display: flex;
-      flex-direction: row;
-      align-items: flex-start;
-      justify-content: space-between;
       margin-bottom: 0;
     }
   }
-  .delete-button {
-    background: red;
-
-    &:hover {
-      background: darkred;
-    }
-  }
-
-
-      }
+}

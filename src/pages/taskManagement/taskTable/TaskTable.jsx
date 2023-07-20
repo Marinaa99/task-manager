@@ -4,9 +4,10 @@ import Table from "../../../components/table/Table.jsx";
 import Button from "../../../components/buttons/button/Button.jsx";
 const TaskTable = ({ tasks, selectedTab, removeTask, editTask }) => {
     const header = [
-        { title: "Name", index: "name", status:"status" },
+        { title: "Name", index: "name" },
         ...(selectedTab === "all" ? [{ title: "Status", index: "status" }] : []),
     ];
+
     const handleEdit = (task) => {
         editTask(task);
     };
@@ -16,12 +17,14 @@ const TaskTable = ({ tasks, selectedTab, removeTask, editTask }) => {
     };
 
     const tasksToDisplay = selectedTab === "deleted" ? tasks.filter((task) => task.deleted) : tasks.filter((task) => !task.deleted);
+
     const formattedData = tasksToDisplay.map((task) => ({
         name: task.title,
         ...(selectedTab === "all" && { status: task.status }),
         id:task.id,
-
+        key: task.id
     }));
+
 
     const actionsHeader = [
         {

@@ -1,8 +1,10 @@
 import React from "react";
 import classes from "./Button.module.scss";
+import { Button as AntdButton} from "antd";
+
 
 const Button = ({label, onClick, className = ""}) => {
-    return <button type="button"
+    return <AntdButton type="button"
                    className={`${classes["button"]} ${className}`}
                    onClick={(e) => {
                        e.preventDefault();
@@ -10,7 +12,7 @@ const Button = ({label, onClick, className = ""}) => {
                    }
                    }>
         {label}
-    </button>
+    </AntdButton>
 }
 
 export default Button;

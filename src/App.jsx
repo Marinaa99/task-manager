@@ -1,25 +1,32 @@
-import { useState } from 'react';
-import "./App.scss";
+import React from 'react';
+import {
+    createBrowserRouter,
+    RouterProvider,
+} from "react-router-dom";
 import Home from "./pages/home/Home.jsx";
 import TaskManagement from "./pages/taskManagement/TaskManagement.jsx";
+import "./App.scss";
+import PageWrapper from "./pages/pageWrapper/PageWrapper.jsx";
+import {TaskProvider} from "./hooksState/TaskContext.jsx";
 
+const router = createBrowserRouter([
+    {
+         path: "/",
+         element: <PageWrapper><TaskManagement/></PageWrapper>,
+     },
+     {
+         path: "task-management",
+         element: <PageWrapper><Home/></PageWrapper>,
+     },
+ ]);
 
 function App() {
 
-    const [activePage, setActivePage]=useState('Home');
-    const [tasks, setTasks] = useState([]);
-
-    const handlePageSwitch = () => {
-        setActivePage((prevPage) =>
-        prevPage === "Home" ? "Task Management" : "Home" );
-    };
 
   return (
-        <div className="__root-element">
-            <button className="__toggle-button" onClick={handlePageSwitch}>
-
-            {activePage === "Home" ? <Home tasks={tasks}/> : <TaskManagement tasks={tasks} setTasks={setTasks} />}
-        </div>
+      <TaskProvider>
+          <RouterProvider router={router}/>
+      </TaskProvider>
   )
 }
 

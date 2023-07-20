@@ -1,13 +1,10 @@
 import React, { createContext, useReducer } from "react";
-import reducer from "../reducer/TaskReducer.jsx";
+import reducer from "./TaskReducer.jsx";
 
 export const TaskContext = createContext();
 
 const initialState = {
     tasks: [],
-    selectedTab: "all",
-    selectedTask: null,
-    showAddForm: false,
 };
 
 export const TaskProvider = ({ children }) => {
