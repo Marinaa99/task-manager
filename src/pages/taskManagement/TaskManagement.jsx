@@ -41,7 +41,7 @@ const TaskManagement = () => {
         const updatedSearchParams = new URLSearchParams(searchParams.toString());
         updatedSearchParams.set("filter", tab);
         setSearchParams(updatedSearchParams.toString());
-        dispatch({ type: "SET_SELECTED_TAB", payload: tab });
+        dispatch({ type: "SET_SELECTED_TAB", payload: tab }
 
     };
 
