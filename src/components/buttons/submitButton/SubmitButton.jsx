@@ -1,7 +1,7 @@
 import React from "react";
 import classes from "./SubmitButton.module.scss";
 import { Button } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+//import { PlusOutlined } from "@ant-design/icons";
 
 
 
@@ -10,10 +10,9 @@ const SubmitButton = ({label, onClick, className = ""}) => {
                    className={`${classes["button"]} ${className}`}
                    onClick={(e) => {
                        e.preventDefault();
-                       onClick()
+                       onClick(e);
                    }
                    }
-                   icon={<PlusOutlined />}
     >
         {label}
     </Button>

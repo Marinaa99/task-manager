@@ -1,5 +1,5 @@
 import React, {useContext, useEffect} from "react";
-import { useSearchParams } from "react-router-dom";
+import {useParams, useSearchParams, useNavigate} from "react-router-dom";
 import classes from "./TaskManagement.module.scss"
 import TaskTable from "./taskTable/TaskTable.jsx";
 import TaskForm from "./taskForm/TaskForm.jsx";
@@ -12,9 +12,12 @@ const TaskManagement = () => {
     const { tasks, selectedTab, selectedTask, showAddForm } = state;
     const [searchParams, setSearchParams] = useSearchParams();
 
+    const navigate = useNavigate();
+    const params = useParams();
 
     const addTask = (task) => {
         dispatch({ type: "ADD_TASK", payload: task });
+
     };
 
     const removeTask = (taskId) => {
@@ -41,13 +44,15 @@ const TaskManagement = () => {
         const updatedSearchParams = new URLSearchParams(searchParams.toString());
         updatedSearchParams.set("filter", tab);
         setSearchParams(updatedSearchParams.toString());
-        dispatch({ type: "SET_SELECTED_TAB", payload: tab }
+        dispatch({ type: "SET_SELECTED_TAB", payload: tab });
 
     };
 
     const handleAddClick = () => {
+        navigate('/add/task');
         dispatch({ type: "SET_SHOW_ADD_FORM", payload: true });
         dispatch({ type: "SET_SELECTED_TASK", payload: null });
+
     };
 
     const filteredTasks = tasks.filter((task) => {
@@ -83,6 +88,7 @@ const TaskManagement = () => {
                 addTask={addTask}
                 updateTask={updateTask}
                 selectedTask={selectedTask}
+                params={params}
             />
         )}
 

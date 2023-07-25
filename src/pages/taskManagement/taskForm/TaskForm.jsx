@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import {useNavigate} from "react-router-dom";
 import classes from "./TaskForm.module.scss";
 import Input from "../../../components/formFields/input/Input.jsx";
 import Textarea from "../../../components/formFields/textarea/Textarea.jsx";
 import Select from "../../../components/formFields/select/Select.jsx";
 import SubmitButton from "../../../components/buttons/submitButton/SubmitButton.jsx";
+
 const TaskForm = ({ addTask, updateTask, selectedTask }) => {
+    const navigate = useNavigate();
+
     const [taskData, setTaskData] = useState({
         title: '',
         description: '',
@@ -24,10 +28,12 @@ const TaskForm = ({ addTask, updateTask, selectedTask }) => {
                 description: '',
                 status: 'wishlist'
             });
+
         }
     }, [selectedTask]);
 
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
         const newTask = {
             id: selectedTask ? selectedTask.id : Math.random().toString(),
             ...taskData
@@ -44,6 +50,7 @@ const TaskForm = ({ addTask, updateTask, selectedTask }) => {
             description: '',
             status: 'wishlist'
         });
+        navigate("/task-management")
     };
 
     const handleInputChange = (e) => {

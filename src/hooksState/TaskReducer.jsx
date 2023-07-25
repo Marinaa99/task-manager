@@ -5,6 +5,7 @@ const reducer = (state, action) => {
                 ...state,
                 tasks: [...state.tasks, action.payload],
             };
+
         case "REMOVE_TASK":
             return {
                 ...state,
