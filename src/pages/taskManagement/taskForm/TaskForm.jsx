@@ -1,40 +1,54 @@
 import React, {useState, useEffect, useContext} from 'react';
+import {useForm} from 'react-hook-form';
+import {yupResolver} from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import {useNavigate} from "react-router-dom";
 import {TaskContext} from "../../../hooksState/TaskContext.jsx";
 import classes from "./TaskForm.module.scss";
-import Input from "../../../components/formFields/input/Input.jsx";
-import Textarea from "../../../components/formFields/textarea/Textarea.jsx";
-import Select from "../../../components/formFields/select/Select.jsx";
 import SubmitButton from "../../../components/buttons/submitButton/SubmitButton.jsx";
+import InputWithController from "../../../components/formFields/inputWithController/InputWithController.jsx";
+import SelectWithController from "../../../components/formFields/selectWithController/SelectWithController.jsx";
+import TextareaWithController from "../../../components/formFields/textAreaWithController/TextareaWithController.jsx";
 
 const TaskForm = () => {
+    const schema = yup.object().shape({
+        title: yup.string().trim()
+            .required("Field required!")
+            .min(3, "Minimum length is 3!")
+            .max(50, "Maximum length is 50!"),
+        description: yup.string().trim()
+            .required("Field required!")
+            .min(3, "Minimum length is 3!")
+            .max(255, "Maximum length is 255!"),
+        status:
+            yup.string().required('Field required!').oneOf(['wishlist', 'to-do', 'in-progress', 'done'], 'Invalid status value!'),
+
+})
+    const { handleSubmit, control, reset,setValue,formState: {errors}
+    } = useForm({resolver: yupResolver(schema),
+        defaultValues: {
+            title: '',
+            description: '',
+            status: 'wishlist',
+        },
+    });
+
+
     const { state, dispatch } = useContext(TaskContext);
     const { selectedTask } = state;
 
     const navigate = useNavigate();
 
-    const [taskData, setTaskData] = useState({
-        title: '',
-        description: '',
-        status: 'wishlist'
-    });
 
     useEffect(() => {
         if (selectedTask) {
-            setTaskData({
-                title: selectedTask.name,
-                description: selectedTask.description,
-                status: selectedTask.status
-            });
+            setValue("title", selectedTask.name);
+            setValue("description", selectedTask.description);
+            setValue("status", selectedTask.status);
         } else {
-            setTaskData({
-                title: '',
-                description: '',
-                status: 'wishlist'
-            });
-
+            reset();
         }
-    }, [selectedTask]);
+    }, [selectedTask, reset, setValue]);
 
     const addTask = (task) => {
         dispatch({ type: "ADD_TASK", payload: task });
@@ -45,11 +59,10 @@ const TaskForm = () => {
         dispatch({ type: "SET_SELECTED_TASK", payload: null });
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const onSubmit = (formData) => {
         const newTask = {
             id: selectedTask ? selectedTask.id : Math.random().toString(),
-            ...taskData
+            ...formData,
         };
 
         if (selectedTask) {
@@ -58,30 +71,12 @@ const TaskForm = () => {
             addTask(newTask);
         }
 
-        setTaskData({
-            title: '',
-            description: '',
-            status: 'wishlist'
-        });
-        navigate("/task-management")
+        reset();
+        navigate('/task-management');
     };
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setTaskData((prevTaskData) => ({
-            ...prevTaskData,
-            [name]: value
-        }));
-    };
 
-    const handleStatusChange = (status) => {
-        setTaskData((prevTaskData) => ({
-            ...prevTaskData,
-            status,
-        }));
-    };
-
-    const statusOptions = [
+    const options = [
         { value: 'wishlist', label: 'Wishlist' },
         { value: 'to-do', label: 'To Do' },
         { value: 'in-progress', label: 'In Progress' },
@@ -91,31 +86,27 @@ const TaskForm = () => {
 
     return (
         <div className={classes.container}>
-            <form onSubmit={handleSubmit}>
-                <Input
-                    type="text"
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <InputWithController
                     placeholder="Naziv"
                     name="title"
-                    value={taskData.title}
-                    onChange={handleInputChange}
+                    control={control}
+                    error={errors?.title?.message}
                 />
-                <Textarea
-                    type="textarea"
+                <TextareaWithController
                     placeholder="Opis"
                     name="description"
-                    value={taskData.description}
-                    onChange={handleInputChange}
+                    control={control}
+                    error={errors?.description?.message}
                 />
-                <Select
-                    type="select"
+                <SelectWithController
                     name="status"
-                    value={taskData.status}
-                    onChange={handleStatusChange}
-                    options={statusOptions}
+                    control={control}
+                    options={options}
+                    error={errors?.select?.message}
                 />
                 <SubmitButton
                 label={selectedTask ? 'Update' : 'Add'}
-                onClick={handleSubmit}
                 />
             </form>
         </div>

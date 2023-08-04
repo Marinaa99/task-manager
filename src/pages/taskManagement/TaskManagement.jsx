@@ -17,7 +17,6 @@ const TaskManagement = () => {
 
     const addTask = (task) => {
         dispatch({ type: "ADD_TASK", payload: task });
-
     };
 
     const removeTask = (taskId) => {
@@ -51,7 +50,7 @@ const TaskManagement = () => {
 
     const handleAddClick = () => {
         navigate('/add/task');
-        dispatch({ type: "SET_SHOW_ADD_FORM", payload: true });
+        dispatch({ type: "SET_SHOW_ADD_FORM", payload: false });
         dispatch({ type: "SET_SELECTED_TASK", payload: null });
 
     };

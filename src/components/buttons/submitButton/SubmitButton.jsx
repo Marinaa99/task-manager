@@ -5,17 +5,16 @@ import { Button } from "antd";
 
 
 
-const SubmitButton = ({label, onClick, className = ""}) => {
-    return <Button type="submit"
+const SubmitButton = ({label, onClick = () => {}, className = ""}) => {
+    return <button type="submit"
                    className={`${classes["button"]} ${className}`}
-                   onClick={(e) => {
-                       e.preventDefault();
-                       onClick(e);
+                   onClick={() => {
+                       onClick()
                    }
                    }
     >
         {label}
-    </Button>
+    </button>
 }
 
 export default SubmitButton
