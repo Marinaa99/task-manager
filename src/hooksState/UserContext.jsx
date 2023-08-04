@@ -19,6 +19,8 @@ const UserContext = createContext();
 
 const UserProvider = ({children}) => {
     const [userData, setUserData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
 
     useEffect(() => {
         const loggedIn = localStorage.getItem('loggedIn');
@@ -28,6 +30,8 @@ const UserProvider = ({children}) => {
             const currentUser = users.find((user) => user.id === parseInt(userId));
             setUserData(currentUser);
         }
+        setLoading(false);
+
     }, []);
 
     const login = (email, password) => {
@@ -65,7 +69,7 @@ const UserProvider = ({children}) => {
         login: (email, password) => login(email, password),
         logout: () => logout()
     }}>
-        {children}
+        {loading ? null : children}
     </UserContext.Provider>
 }
 

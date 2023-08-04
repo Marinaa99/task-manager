@@ -30,6 +30,7 @@ const TaskManagement = () => {
     };
 
     const editTask = (task) => {
+        navigate(`/edit/task/${task.id}`);
         dispatch({ type: "SET_SELECTED_TASK", payload: task });
     };
 

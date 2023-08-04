@@ -1,12 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {useNavigate} from "react-router-dom";
+import {TaskContext} from "../../../hooksState/TaskContext.jsx";
 import classes from "./TaskForm.module.scss";
 import Input from "../../../components/formFields/input/Input.jsx";
 import Textarea from "../../../components/formFields/textarea/Textarea.jsx";
 import Select from "../../../components/formFields/select/Select.jsx";
 import SubmitButton from "../../../components/buttons/submitButton/SubmitButton.jsx";
 
-const TaskForm = ({ addTask, updateTask, selectedTask }) => {
+const TaskForm = () => {
+    const { state, dispatch } = useContext(TaskContext);
+    const { selectedTask } = state;
+
     const navigate = useNavigate();
 
     const [taskData, setTaskData] = useState({
@@ -31,6 +35,15 @@ const TaskForm = ({ addTask, updateTask, selectedTask }) => {
 
         }
     }, [selectedTask]);
+
+    const addTask = (task) => {
+        dispatch({ type: "ADD_TASK", payload: task });
+    };
+
+    const updateTask = (updatedTask) => {
+        dispatch({ type: "UPDATE_TASK", payload: updatedTask });
+        dispatch({ type: "SET_SELECTED_TASK", payload: null });
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();

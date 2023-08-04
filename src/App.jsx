@@ -33,6 +33,11 @@ const router = createBrowserRouter([
         path: "/add/task",
         element: <AuthWrapper><PageWrapper><TaskForm/></PageWrapper></AuthWrapper>,
     },
+
+    {
+        path: "/edit/task/:taskId",
+        element: <AuthWrapper><PageWrapper><TaskForm/></PageWrapper></AuthWrapper>,
+    },
  ]);
 
 function App() {
