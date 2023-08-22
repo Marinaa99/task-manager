@@ -6,7 +6,7 @@ import { Button } from "antd";
 
 
 const SubmitButton = ({label, onClick = () => {}, className = ""}) => {
-    return <button type="submit"
+    return <Button htmlType="submit"
                    className={`${classes["button"]} ${className}`}
                    onClick={() => {
                        onClick()
@@ -14,7 +14,7 @@ const SubmitButton = ({label, onClick = () => {}, className = ""}) => {
                    }
     >
         {label}
-    </button>
+    </Button>
 }
 
 export default SubmitButton

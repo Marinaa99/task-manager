@@ -24,7 +24,7 @@ const TaskForm = () => {
             yup.string().required('Field required!').oneOf(['wishlist', 'to-do', 'in-progress', 'done'], 'Invalid status value!'),
 
 })
-    const { handleSubmit, control, reset,setValue,formState: {errors}
+    const { handleSubmit, control, reset,formState: {errors}
     } = useForm({resolver: yupResolver(schema),
         defaultValues: {
             title: '',
@@ -42,13 +42,15 @@ const TaskForm = () => {
 
     useEffect(() => {
         if (selectedTask) {
-            setValue("title", selectedTask.name);
-            setValue("description", selectedTask.description);
-            setValue("status", selectedTask.status);
+            reset({
+                title: selectedTask.name,
+                description: selectedTask.description,
+                status: selectedTask.status
+            });
         } else {
             reset();
         }
-    }, [selectedTask, reset, setValue]);
+    }, [selectedTask, reset]);
 
     const addTask = (task) => {
         dispatch({ type: "ADD_TASK", payload: task });

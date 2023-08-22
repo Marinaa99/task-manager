@@ -5,6 +5,7 @@ import Button from "../../../components/buttons/button/Button.jsx";
 const TaskTable = ({ tasks, selectedTab, removeTask, editTask }) => {
     const header = [
         { title: "Name", index: "name" },
+        { title: "Description", index: "description" },
         ...(selectedTab === "all" ? [{ title: "Status", index: "status" }] : []),
     ];
 
@@ -20,6 +21,7 @@ const TaskTable = ({ tasks, selectedTab, removeTask, editTask }) => {
 
     const formattedData = tasksToDisplay.map((task) => ({
         name: task.title,
+        description: task.description,
         ...(selectedTab === "all" && { status: task.status }),
         id:task.id,
         key: task.id
