@@ -1,75 +1,52 @@
 import React, {createContext, useContext, useState, useEffect} from "react";
+import {storageService} from "../services/StorageService.js";
+import {userService} from "../services/UserService.js";
+import {storageKeys} from "../config/config.js";
 
-const users = [
-    {
-        id: 1,
-        email: 'marina.vojinovic@gmail.com',
-        password: '12345',
-        name: 'Marina Vojinovic'
-    },
-    {
-        id: 2,
-        email: 'ksenija.bulatovic@gmail.com',
-        password: '111111',
-        name: 'Ksenija Bulatovic'
-    }
-]
+
 
 const UserContext = createContext();
 
 const UserProvider = ({children}) => {
     const [userData, setUserData] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [dataLoaded, setDataLoaded] = useState(false);
 
 
-    useEffect(() => {
-        const loggedIn = localStorage.getItem('loggedIn');
-        const userId = localStorage.getItem('userId');
 
-        if (loggedIn && userId) {
-            const currentUser = users.find((user) => user.id === parseInt(userId));
-            setUserData(currentUser);
-        }
-        setLoading(false);
-
-    }, []);
-
-    const login = (email, password) => {
-        const currentUser = users.find(user => user.email === email);
-        let success = false;
-
-        if(currentUser){
-            if(currentUser.password === password){
-                setUserData(currentUser);
-                localStorage.setItem('loggedIn', true);
-                localStorage.setItem('userId', currentUser.id);
-                success = true;
-            }else{
-                setUserData(null);
-                localStorage.removeItem('loggedIn');
-                localStorage.removeItem('userId');
-            }
+    const getUser = async () => {
+        setDataLoaded(false)
+        if(storageService.exists(storageKeys.USER)){
+            userService.getCurrentUserData()
+                .then(r => {
+                    setUserData(r)
+                    setDataLoaded(true)
+                })
+                .catch(() => {
+                    setUserData(null)
+                    setDataLoaded(true)
+                })
         }else{
-            setUserData(null);
-            localStorage.removeItem('loggedIn');
-            localStorage.removeItem('userId');
+            setUserData(null)
+            setDataLoaded(true)
         }
-
-        return success;
     }
+
 
     const logout = () => {
-        setUserData(null);
-        localStorage.removeItem('loggedIn');
-        localStorage.removeItem('userId');
+        setUserData(null)
+        storageService.clear()
     }
+
+    useEffect(() => {
+        getUser()
+    }, []);
 
     return <UserContext.Provider value={{
         userData: userData,
-        login: (email, password) => login(email, password),
+        refreshUserData: () => getUser(),
         logout: () => logout()
     }}>
-        {loading ? null : children}
+        {dataLoaded && children}
     </UserContext.Provider>
 }
 

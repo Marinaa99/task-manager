@@ -5,12 +5,48 @@ import * as yup from "yup";
 import {useNavigate} from "react-router-dom";
 import {TaskContext} from "../../../hooksState/TaskContext.jsx";
 import classes from "./TaskForm.module.scss";
+import {message} from 'antd';
 import SubmitButton from "../../../components/buttons/submitButton/SubmitButton.jsx";
 import InputWithController from "../../../components/formFields/inputWithController/InputWithController.jsx";
 import SelectWithController from "../../../components/formFields/selectWithController/SelectWithController.jsx";
 import TextareaWithController from "../../../components/formFields/textAreaWithController/TextareaWithController.jsx";
+import {useQueryClient, useQuery, useMutation} from "react-query";
+import {taskService} from "../../../services/TaskService.js";
 
-const TaskForm = () => {
+const TaskForm = ({id, close}) => {
+    const queryClient = useQueryClient();
+
+    const add = useMutation((data) => taskService.add(data)
+        .then(r => {
+            message.success("Succesfully added!");
+            queryClient.invalidateQueries("tasks")
+            close()
+        })
+        .catch(err => {
+            console.log(err?.response?.data)
+            message.error("There has been an error!")
+        }))
+
+    const edit = useMutation((data) => taskService.edit(data)
+        .then(r => {
+            message.success("Sucessfully edited!");
+            queryClient.invalidateQueries("tasks")
+            close()
+        })
+        .catch(err => {
+            console.log(err?.response?.data)
+            message.error("There has been an error!")
+        }))
+
+    const get = (id) => {
+        return taskService.get(id)
+            .then(res => {
+                reset(res)
+            })
+            .catch(err => message.error("There has been an error!"))
+    }
+
+
     const schema = yup.object().shape({
         title: yup.string().trim()
             .required("Field required!")
@@ -24,76 +60,32 @@ const TaskForm = () => {
             yup.string().required('Field required!').oneOf(['wishlist', 'to-do', 'in-progress', 'done'], 'Invalid status value!'),
 
 })
-    const { handleSubmit, control, reset,formState: {errors}
+    const { handleSubmit, control, reset, formState: {errors}
     } = useForm({resolver: yupResolver(schema),
-        defaultValues: {
-            title: '',
-            description: '',
-            status: 'wishlist',
-        },
+
     });
 
+    const onSave = (formData) => {
+        console.log('Form Data:', formData); // Make sure form data is being logged
 
-    const { state, dispatch } = useContext(TaskContext);
-    const { selectedTask } = state;
-
-    const navigate = useNavigate();
-
-
-    useEffect(() => {
-        if (selectedTask) {
-            reset({
-                title: selectedTask.name,
-                description: selectedTask.description,
-                status: selectedTask.status
-            });
-        } else {
-            reset();
+        if(id){
+            edit.mutate(formData)
+        }else{
+            add.mutate(formData)
         }
-    }, [selectedTask, reset]);
-
-    const addTask = (task) => {
-        dispatch({ type: "ADD_TASK", payload: task });
-    };
-
-    const updateTask = (updatedTask) => {
-        dispatch({ type: "UPDATE_TASK", payload: updatedTask });
-        dispatch({ type: "SET_SELECTED_TASK", payload: null });
-    };
-
-    const onSubmit = (formData) => {
-        const newTask = {
-            id: selectedTask ? selectedTask.id : Math.random().toString(),
-            ...formData,
-        };
-
-        if (selectedTask) {
-            updateTask(newTask);
-        } else {
-            addTask(newTask);
-        }
-
-        reset();
-        navigate('/task-management');
-    };
+    }
 
 
-    const options = [
-        { value: 'wishlist', label: 'Wishlist' },
-        { value: 'to-do', label: 'To Do' },
-        { value: 'in-progress', label: 'In Progress' },
-        { value: 'done', label: 'Done' }
-    ];
 
 
     return (
         <div className={classes.container}>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSave)}>
                 <InputWithController
                     placeholder="Naziv"
-                    name="title"
+                    name="name"
                     control={control}
-                    error={errors?.title?.message}
+                    error={errors?.name?.message}
                 />
                 <TextareaWithController
                     placeholder="Opis"
@@ -101,14 +93,10 @@ const TaskForm = () => {
                     control={control}
                     error={errors?.description?.message}
                 />
-                <SelectWithController
-                    name="status"
-                    control={control}
-                    options={options}
-                    error={errors?.select?.message}
-                />
+
                 <SubmitButton
-                label={selectedTask ? 'Update' : 'Add'}
+                label={'Add'}
+                onClick={onSave}
                 />
             </form>
         </div>

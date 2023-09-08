@@ -6,7 +6,7 @@ import { Button } from "antd";
 
 
 const SubmitButton = ({label, onClick = () => {}, className = ""}) => {
-    return <Button htmlType="submit"
+    return <Button type="submit"
                    className={`${classes["button"]} ${className}`}
                    onClick={() => {
                        onClick()

@@ -1,7 +1,7 @@
 import React from 'react';
 import  "./PageWrapper.module.scss"
 import {
-    Link,
+    NavLink,
 } from "react-router-dom";
 import {useUserData} from "../../hooksState/UserContext.jsx";
 import { Menu, Dropdown, Avatar } from 'antd';
@@ -27,17 +27,17 @@ const PageWrapper = ({ children }) => {
         <div className="__root-element">
             <Menu className={classes["menu"]} mode="horizontal" theme="dark">
                 <Menu.Item key="home" icon={<HomeOutlined />}>
-                    <Link to="/">Home</Link>
+                    <NavLink to="/">Home</NavLink>
                 </Menu.Item>
 
                 <Menu.Item key="task" icon={<AppstoreOutlined />}>
-                    <Link to="/task-management">Task Management</Link>
+                    <NavLink to="/task-management">Task Management</NavLink>
                 </Menu.Item>
 
                 <Menu.Item key="user" className={classes["user-menu"]}>
                     <Dropdown overlay={menu} placement="bottomRight" arrow>
                         <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
-                            <Avatar icon={<UserOutlined />} /> {/* Dodajte ikonu avatara */}
+                            <Avatar icon={<UserOutlined />} />
                             {userData?.name} <DownOutlined />
                         </a>
                     </Dropdown>

@@ -3,16 +3,23 @@ import {
     createBrowserRouter,
     RouterProvider,
 } from "react-router-dom";
+import {QueryClient, QueryClientProvider} from "react-query";
+import {reactQueryConfig} from "./config/config.js";
 import Home from "./pages/home/Home.jsx";
 import TaskManagement from "./pages/taskManagement/TaskManagement.jsx";
-import Task from "./pages/task/Task.jsx";
 import "./App.scss";
 import PageWrapper from "./pages/pageWrapper/PageWrapper.jsx";
 import {TaskProvider} from "./hooksState/TaskContext.jsx";
+import ModalProvider from "./hooksState/ModalContext.jsx";
 import TaskForm from "./pages/taskManagement/taskForm/TaskForm.jsx";
 import UserProvider from "./hooksState/UserContext.jsx";
 import Login from "./pages/login/Login.jsx";
+import Register from "./pages/register/Register.jsx";
 import AuthWrapper from "./pages/authWrapper/AuthWrapper.jsx";
+
+
+
+const queryClient = new QueryClient(reactQueryConfig);
 
 
 const router = createBrowserRouter([
@@ -20,6 +27,12 @@ const router = createBrowserRouter([
          path: "/",
          element: <AuthWrapper><PageWrapper><Home/></PageWrapper></AuthWrapper>,
      },
+
+    {
+        path: "/register",
+        element: <Register/>,
+    },
+
     {
         path: "/login",
         element: <Login/>,
@@ -29,26 +42,22 @@ const router = createBrowserRouter([
          element: <AuthWrapper><PageWrapper><TaskManagement/></PageWrapper></AuthWrapper>,
      },
 
-    {
-        path: "/add/task",
-        element: <AuthWrapper><PageWrapper><TaskForm/></PageWrapper></AuthWrapper>,
-    },
 
-    {
-        path: "/edit/task/:taskId",
-        element: <AuthWrapper><PageWrapper><TaskForm/></PageWrapper></AuthWrapper>,
-    },
  ]);
 
 function App() {
 
 
   return (
+      <QueryClientProvider client={queryClient}>
       <UserProvider>
       <TaskProvider>
+          <ModalProvider>
           <RouterProvider router={router}/>
+          </ModalProvider>
       </TaskProvider>
       </UserProvider>
+      </QueryClientProvider>
   )
 }
 
