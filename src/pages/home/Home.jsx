@@ -5,6 +5,7 @@ import TaskSearch from "../../components/taskSearch/TaskSearch.jsx";
 import TaskWrapper from "../../components/taskWrapper/TaskWrapper.jsx";
 import useDebounce from "../../hooks/UseDebounce.js";
 import {TaskContext} from "../../hooksState/TaskContext.jsx";
+import Footer from "../../components/footer/Footer.jsx";
 
 const Home = () => {
     const { state } = useContext(TaskContext);
@@ -52,7 +53,7 @@ const Home = () => {
                 />
        </TaskWrapper>
 
-
+<Footer/>
     </>
 }
 
